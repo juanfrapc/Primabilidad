@@ -14,7 +14,7 @@ public class AlgoritmoProbabilistico {
         Set<Integer> testigos = seleccionarTestigosAleatorios(numero, pruebas);
         Set<Integer> comprobadores = generarComprobadores(numero);
         for (Integer testigo : testigos) {
-            long n = (long) ((pow(testigo, numero - 1)) % numero);
+            long n = modPower(testigo, numero -1, numero);
             if (n != 1) {
                 System.out.println("NO cumple p1: " + testigo + "  " + n);
                 return false;
@@ -58,6 +58,35 @@ public class AlgoritmoProbabilistico {
             a = temp;
         }
         return a;
+    }
+
+    private static long modPower(int base, int exponente, int modulo) {
+        int lim = (int) Math.ceil(log(exponente)/log(2));
+        long[] vector = new long[lim]; // v[i]=base^i mod modulo;
+        vector[0]=1;
+        for (int i = 1; i < lim; i++) {
+            vector[i] = vector[i-1] * base % modulo;
+            System.out.println(i + " " + vector[i]);
+        }
+        int res = 1;
+        for (int i = lim-1; i >= 0; i++) {
+            if(exponente >= pow(2,i)){
+                res*=vector[i] % modulo;
+            }
+            exponente = (int) (exponente - pow(2,i));
+        }
+        return res;
+//        if (exponente <=1){
+//            return exponente==1?base % modulo : 1;
+//        }
+//        int e1 = exponente/2;
+//        long r1 = modPower(base, e1, modulo);
+//        long r2 = modPower(base, exponente - e1, modulo);
+//        return r1*r2 % modulo;
+//        for (int j = 1; j < exponente; j++) {
+//            res = res*base % modulo;
+//        }
+//        return res;
     }
 
 }
