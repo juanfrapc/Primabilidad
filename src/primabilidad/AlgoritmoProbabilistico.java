@@ -14,12 +14,15 @@ public class AlgoritmoProbabilistico {
         Set<Integer> testigos = seleccionarTestigosAleatorios(numero, pruebas);
         Set<Integer> comprobadores = generarComprobadores(numero);
         for (Integer testigo : testigos) {
-            if (pow(testigo, numero - 1) % numero != 1) {
+            long n = (long) ((pow(testigo, numero - 1)) % numero);
+            if (n != 1) {
+                System.out.println("NO cumple p1: " + testigo + "  " + n);
                 return false;
             }
             for (Integer comprobador : comprobadores) {
                 int mcd = MCD((int) (pow(testigo, comprobador) - 1), numero);
                 if (mcd > 1 && mcd < numero) {
+                    System.out.println("NO cumple p2: " + testigo + "  " + comprobador + "  " + mcd);
                     return false;
                 }
             }
@@ -30,7 +33,7 @@ public class AlgoritmoProbabilistico {
     private static Set<Integer> seleccionarTestigosAleatorios(int numero, int pruebas) {
         HashSet<Integer> testigos = new HashSet();
         while (testigos.size() < pruebas) {
-            testigos.add((round((float) (numero * random() + 0.5))));
+            testigos.add((round((float) ((numero-1) * random() + 0.5))));
         }
         return testigos;
     }
