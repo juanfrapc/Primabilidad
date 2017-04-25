@@ -8,7 +8,7 @@ public class Primabilidad {
 
         int nIteraciones = 100;
         int nPruebas = 4;
-        int candidato = 29;
+        int candidato = 341;
         double aciertos = 0;
         
         for (int i = 0; i < nIteraciones; i++) {
