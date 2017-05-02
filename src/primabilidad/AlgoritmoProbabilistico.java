@@ -4,7 +4,6 @@ import static java.lang.Math.log;
 import static java.lang.Math.pow;
 import static java.lang.Math.random;
 import static java.lang.Math.round;
-import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -19,21 +18,22 @@ public class AlgoritmoProbabilistico {
         Set<Integer> testigos = seleccionarTestigosAleatorios(numero, pruebas);
         Set<Integer> comprobadores = generarComprobadores(numero);
         for (Integer testigo : testigos) {
-            long n = modPower(2, numero - 1, numero);
+            long n = modPower(testigo, numero - 1, numero);
             if (n != 1) {
                 System.out.println("NO cumple p1: " + testigo + "  " + n);
                 return false;
             }
             //(pow(testigo, comprobador) - 1)
             for (Integer comprobador : comprobadores) {
-                BigDecimal num1 = new BigDecimal(testigo).pow(comprobador);
-                num1 = num1.subtract(new BigDecimal(1));
-                double mcd = MCD(num1, numero);
+                long pot = modPower(testigo, comprobador, numero);
+                pot = pot == 0 ? numero-1:pot-1;
+                long mcd = MCD(numero,pot);
                 if (mcd > 1 && mcd < numero) {
                     System.out.println("NO cumple p2: " + testigo + "  " + comprobador + "  " + mcd);
                     return false;
                 }
             }
+            System.out.println("Lo cumple para testigo = " + testigo);
         }
         return true;
     }
@@ -59,16 +59,10 @@ public class AlgoritmoProbabilistico {
         return comprobadores;
     }
 
-    private static double MCD(BigDecimal a, double b) {
-        String number = a.toString();
-        for (int i = 0; i < number.length(); i++) {
-            b = Integer.parseInt(number.substring(i, i + 1)) % b;
-            b *=10;
-        }
+    private static long MCD(long a, long b) {
         while (b != 0) {
-            double temp = b;
+            long temp = b;
             b = a % b;
-            
             a = temp;
         }
         return a;
